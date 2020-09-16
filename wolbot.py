@@ -25,13 +25,13 @@ def status(query):
     if response == 0:
         bot.send_message(cid, 'Server is running🤙')
     else:
-        bot.send_message(cid, 'Server is down😴')
+        bot.send_message(cid, 'Server is down')
 
 @bot.callback_query_handler(lambda query: query.data == 'start')
 def start(query): 
     response = os.system("ping -c 1 " + hulkServerIp) 
     waittime = 1
-    bot.send_message(cid, 'Roger, im gona wake it up!🥁')
+    bot.send_message(cid, 'Got it, Im gona wake it up!🥁')
     while response != 0 and waittime <= 15:
         os.system("etherwake D0:50:99:1C:0E:01")
         time.sleep(1)
@@ -42,7 +42,7 @@ def start(query):
         bot.send_message(cid, '''I couldnt handl'e to wakeup the server😑''')
 
     if response == 0:
-        bot.send_message(cid, 'All right. The server is running😁')
+        bot.send_message(cid, 'All right. The server is running')
 
 @bot.message_handler(commands=['help'])
 def help(message):
