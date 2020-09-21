@@ -15,7 +15,7 @@ menuKeyboard.add(types.InlineKeyboardButton('Server Status', callback_data='stat
 @bot.message_handler(commands=['start', 'verwache', 'wachufdusiech', 'wachaentlechufman', 'ufwache'])
 def send(message):
     if cid == message.chat.id:    
-        bot.send_message(cid, 'What would you like to do?', reply_markup=menuKeyboard)
+        bot.send_message(cid, reply_markup=menuKeyboard)
     else:
         bot.reply_to(message,'You dont have permission for this command')
 
