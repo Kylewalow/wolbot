@@ -34,7 +34,7 @@ def start(query):
     waittime = 1
     bot.send_message(cid, 'Got it, Im gona wake it up!🥁')
     while response != 0 and waittime <= 15:
-        os.system("etherwake "+ hulkMac)
+        os.system("sudo etherwake "+ hulkMac)
         time.sleep(1)
         waittime += 1
         response = os.system("ping -c 1 " + hulkServerIp) 
