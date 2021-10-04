@@ -32,7 +32,7 @@ def send_welcome(message):
     waittime = 3
 
     while response != 0 and waittime >= 0:
-        # os.system("sudo etherwake "+ serverIp)
+        os.system("sudo etherwake "+ serverIp)
         time.sleep(1)
         response = os.system("ping -c 1 " + serverIp)
 
