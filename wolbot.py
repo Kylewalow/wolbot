@@ -7,7 +7,7 @@ import os
 bot_token = config.token
 cid =  config.chat_id
 serverIp = config.ip
-hulkMac = config.mac
+serverMac = config.mac
 
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 menuKeyboard = types.InlineKeyboardMarkup()
@@ -32,7 +32,7 @@ def send_welcome(message):
     waittime = 3
 
     while response != 0 and waittime >= 0:
-        os.system("sudo etherwake "+ serverIp)
+        os.system("sudo etherwake "+ serverMac)
         time.sleep(1)
         response = os.system("ping -c 1 " + serverIp)
 
