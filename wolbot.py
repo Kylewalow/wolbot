@@ -6,52 +6,43 @@ import os
 
 bot_token = config.token
 cid =  config.chat_id
-hulkServerIp = config.ip
+serverIp = config.ip
 hulkMac = config.mac
 
-bot = telebot.TeleBot(token=bot_token)
+bot = telebot.TeleBot(bot_token, parse_mode=None)
 menuKeyboard = types.InlineKeyboardMarkup()
 menuKeyboard.add(types.InlineKeyboardButton('Server Status', callback_data='status'), types.InlineKeyboardButton('Start Plex-Server', callback_data='start'))
 
-@bot.message_handler(commands=['start', 'verwache', 'wachufdusiech', 'wachaentlechufman', 'ufwache'])
-def send(message):
-    if cid == message.chat.id:    
-        bot.send_message(cid, reply_markup=menuKeyboard)
-    else:
-        bot.reply_to(message,'You dont have permission for this command')
 
-@bot.callback_query_handler(lambda query: query.data == 'status')
-def status(query):
-    response = os.system("ping -c 1 " + hulkServerIp)
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    sentMessage = bot.reply_to(message, "Ahoy")
+
+    if cid != message.chat.id:
+        bot.edit_message_text("Wrong chat for this command", sentMessage.chat.id, sentMessage.message_id)
+        return
+
+    response = os.system("ping -c 1 " + serverIp)
+    print(response)
     if response == 0:
-        bot.send_message(cid, 'Server is running🤙')
+        bot.edit_message_text("Plex server is up", sentMessage.chat.id, sentMessage.message_id)
     else:
-        bot.send_message(cid, 'Server is down')
+        bot.edit_message_text("Starting plex server...", sentMessage.chat.id, sentMessage.message_id)
 
-@bot.callback_query_handler(lambda query: query.data == 'start')
-def start(query): 
-    response = os.system("ping -c 1 " + hulkServerIp) 
-    waittime = 1
-    bot.send_message(cid, 'Got it, Im gona wake it up!🥁')
-    while response != 0 and waittime <= 15:
-        os.system("sudo etherwake "+ hulkMac)
+    waittime = 3
+
+    while response != 0 and waittime >= 0:
+        # os.system("sudo etherwake "+ serverIp)
         time.sleep(1)
-        waittime += 1
-        response = os.system("ping -c 1 " + hulkServerIp) 
+        response = os.system("ping -c 1 " + serverIp)
 
-    if response != 0 and waittime >= 15:
-        bot.send_message(cid, '''I couldnt handl'e to wakeup the server😑''')
+        if response != 0 and waittime > 0:
+            bot.edit_message_text(waittime, sentMessage.chat.id, sentMessage.message_id)
+        if  response != 0 and waittime <= 0:
+            bot.edit_message_text("Server still down, please try again or contact the server admin", sentMessage.chat.id, sentMessage.message_id)
+        if response == 0:
+            bot.edit_message_text("Server is running", sentMessage.chat.id, sentMessage.message_id)
 
-    if response == 0:
-        bot.send_message(cid, 'All right. The server is running')
+        waittime -= 1
 
-@bot.message_handler(commands=['help'])
-def help(message):
-    if cid == message.chat.id:    
-        bot.reply_to(message, 'Enter: /start')
-
-while True:
-    try:
-        bot.polling(interval=1)
-    except Exception:
-        time.sleep(15)
+bot.infinity_polling()
