@@ -11,14 +11,14 @@ serverMac = config.mac
 
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 menuKeyboard = types.InlineKeyboardMarkup()
-menuKeyboard.add(types.InlineKeyboardButton('Server Status', callback_data='status'), types.InlineKeyboardButton('Start Plex-Server', callback_data='start'))
+menuKeyboard.add(types.InlineKeyboardButton('Server status', callback_data='status'), types.InlineKeyboardButton('Start plex server', callback_data='start'))
 
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     sentMessage = bot.reply_to(message, "Ahoy")
 
-    if cid != message.chat.id:
+    if (str(cid) != str(sentMessage.chat.id)):
         bot.edit_message_text("Wrong chat for this command", sentMessage.chat.id, sentMessage.message_id)
         return
 
