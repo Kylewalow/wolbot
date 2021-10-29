@@ -22,8 +22,9 @@ def send_welcome(message):
         bot.edit_message_text("Wrong chat for this command", sentMessage.chat.id, sentMessage.message_id)
         return
 
+    os.system("sudo etherwake "+ serverMac)
     response = os.system("ping -c 1 " + serverIp)
-    print(response)
+
     if response == 0:
         bot.edit_message_text("Plex server is up", sentMessage.chat.id, sentMessage.message_id)
     else:
